@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-# Dictionary to map emotions to IMDb URLs
 URLS = {
     "Drama": 'https://www.imdb.com/search/title/?title_type=feature&genres=drama',
     "Action": 'https://www.imdb.com/search/title/?title_type=feature&genres=action',
@@ -25,18 +24,16 @@ def main(emotion):
 
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Check for HTTP errors
+        response.raise_for_status()  
     except requests.RequestException as e:
         print(f"Error fetching data: {e}")
         return []
 
     soup = BeautifulSoup(response.text, "lxml")
 
-    # Extract movie titles
     titles = [a.get_text() for a in soup.find_all('a', href=re.compile(r'/title/tt\d+/'))]
     return titles
 
-# Driver Function
 if __name__ == '__main__':
     print ("Type among these emotions: Drama, Action, Comedy, Horror, Crime")
     emotion = input("Enter the emotion: ").strip()
